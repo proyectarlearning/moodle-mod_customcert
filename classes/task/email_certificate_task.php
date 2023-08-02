@@ -58,12 +58,12 @@ class email_certificate_task extends \core\task\scheduled_task {
                     ON c.templateid = ct.id
                   JOIN {course} co
                     ON c.course = co.id
-                 WHERE (c.emailstudents = :emailstudents
+                /* WHERE (c.emailstudents = :emailstudents
                         OR c.emailteachers = :emailteachers
-                        OR $emailotherslengthsql >= 3)";
-        if (!$customcerts = $DB->get_records_sql($sql, array('emailstudents' => 1, 'emailteachers' => 1))) {
+                        OR $emailotherslengthsql >= 3)*/";
+        /*if (!$customcerts = $DB->get_records_sql($sql, array('emailstudents' => 1, 'emailteachers' => 1))) {
             return;
-        }
+        }*/
 
         // The renderers used for sending emails.
         $page = new \moodle_page();
@@ -169,6 +169,10 @@ class email_certificate_task extends \core\task\scheduled_task {
 
             // If there are no users to email we can return early.
             if (!$issuedusers) {
+                continue;
+            }
+            
+            if($customcert->emailstudents == 0 && $customcert->emailteachers == 0){
                 continue;
             }
 
